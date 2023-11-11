@@ -76,7 +76,6 @@ jobs:
           fi
 
       - name: Download Custom-Gcc
-        if: env.USE_CUSTOM_GCC_64 == 'true' || env.USE_CUSTOM_GCC_32 == 'true'
         run: |
           cd $GITHUB_WORKSPACE/kernel_workspace
 
