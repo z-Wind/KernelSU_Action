@@ -8,14 +8,14 @@ on:
 jobs:
   build:
     name: Build Kernel by ${{ github.actor }}
-    runs-on: ubuntu-latest
+    runs-on: arch-latest
     if: github.event.repository.owner.id == github.event.sender.id
     env:
       CCACHE_COMPILERCHECK: "%compiler% -dumpmachine; %compiler% -dumpversion"
       CCACHE_NOHASHDIR: "true"
       CCACHE_HARDLINK: "true"
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Prepare Configuration
       run: |
         CONFIG_ENV=$(cat config.env | grep -w "CONFIG_ENV" | head -n 1 | cut -d "=" -f 2)
@@ -65,7 +65,8 @@ jobs:
         echo "DEVICE=$(echo ${{ env.KERNEL_CONFIG }} | sed 's!vendor/!!;s/_defconfig//;s/_user//;s/-perf//')" >> $GITHUB_ENV
         sudo apt-get update
         sudo apt-get install git ccache automake flex lzop bison gperf build-essential zip curl zlib1g-dev g++-multilib libxml2-utils bzip2 libbz2-dev libbz2-1.0 libghc-bzlib-dev squashfs-tools pngcrush schedtool dpkg-dev liblz4-tool make optipng maven libssl-dev pwgen libswitch-perl policycoreutils minicom libxml-sax-base-perl libxml-simple-perl bc libc6-dev-i386 lib32ncurses5-dev libx11-dev lib32z-dev libgl1-mesa-dev xsltproc unzip device-tree-compiler python2 python3
-        sudo apt-get install gcc-multilib gcc-aarch64-linux-gnu
+        sudo apt-get install gcc-multilib
+        sudo apt-get install gcc-aarch64-linux-gnu
         mkdir -p $GITHUB_WORKSPACE/kernel_workspace
 
     - name: Download Clang-aosp
