@@ -69,7 +69,7 @@ jobs:
               if [[ ${{ env.CUSTOM_CLANG_SOURCE }} == *'.tar.xz' ]]; then
                       wget -O clang.tar.xz ${{ env.CUSTOM_CLANG_SOURCE }}
                       mkdir clang-aosp
-                      tar -C clang-aosp/ -Jxvf clang.tar.xz
+                      tar -C clang-aosp/ -Jxvf clang.tar.xz `${{ env.CUSTOM_CLANG_SOURCE }} | cut -d "/" -f 9 | sed 's/.tar.xz//g`
               else
                   if [[ ${{ env.CUSTOM_CLANG_SOURCE }} =~ git ]]; then
                       git clone ${{ env.CUSTOM_CLANG_SOURCE }} -b ${{ env.CUSTOM_CLANG_BRANCH }} clang-aosp --depth=1
@@ -159,7 +159,7 @@ jobs:
       - name: Build kernel
         run: |
           cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
-          export PATH=$GITHUB_WORKSPACE/kernel_workspace/clang-aosp/clang+llvm-17.0.4-x86_64-linux-gnu-ubuntu-22.04/bin:$PATH
+          export PATH=$GITHUB_WORKSPACE/kernel_workspace/clang-aosp/bin:$PATH
           export PATH=$GITHUB_WORKSPACE/kernel_workspace/gcc-64/bin:$PATH
           export PATH=$GITHUB_WORKSPACE/kernel_workspace/gcc-32/bin:$PATH
           export KBUILD_BUILD_HOST=Github-Action
