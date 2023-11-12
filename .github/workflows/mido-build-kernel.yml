@@ -55,6 +55,7 @@ jobs:
           echo "BUILD_TIME=$(TZ=Asia/Taipei date "+%Y%m%d%H%M")" >> $GITHUB_ENV
           echo "DEVICE=$(echo ${{ env.KERNEL_CONFIG }} | sed 's!vendor/!!;s/_defconfig//;s/_user//;s/-perf//')" >> $GITHUB_ENV
           sudo apt-get update
+          sudo apt-get install build-essential bc gcc-aarch64-linux-gnu gcc-arm-linux-gnueabi libssl-dev libfl-dev
           sudo apt-get install git ccache automake flex lzop bison gperf build-essential zip curl zlib1g-dev g++-multilib libxml2-utils bzip2 libbz2-dev libbz2-1.0 libghc-bzlib-dev squashfs-tools pngcrush schedtool dpkg-dev liblz4-tool make optipng maven libssl-dev pwgen libswitch-perl policycoreutils minicom libxml-sax-base-perl libxml-simple-perl bc libc6-dev-i386 lib32ncurses5-dev libx11-dev lib32z-dev libgl1-mesa-dev xsltproc unzip device-tree-compiler python2 python3 xz-utils zstd
           mkdir -p $GITHUB_WORKSPACE/kernel_workspace
 
@@ -160,8 +161,9 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE/kernel_workspace/android-kernel
           export PATH=$GITHUB_WORKSPACE/kernel_workspace/clang-aosp/bin:$PATH
-          export PATH=$GITHUB_WORKSPACE/kernel_workspace/gcc-64/bin:$PATH
-          export PATH=$GITHUB_WORKSPACE/kernel_workspace/gcc-32/bin:$PATH
+          # export PATH=$GITHUB_WORKSPACE/kernel_workspace/gcc-64/bin:$PATH
+          # export PATH=$GITHUB_WORKSPACE/kernel_workspace/gcc-32/bin:$PATH
+          echo "PATH Variable: $PATH"
           export KBUILD_BUILD_HOST=Github-Action
           export KBUILD_BUILD_USER=$(echo ${{ github.actor }} | tr A-Z a-z)
           if [ ! -z ${{ env.KSU_EXPECTED_SIZE }} ] && [ ! -z ${{ env.KSU_EXPECTED_HASH }} ]; then
